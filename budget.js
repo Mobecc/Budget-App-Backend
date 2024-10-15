@@ -26,7 +26,7 @@ function calculateTotalBudget() {
     });
     return total;
 }
-
+// Budget visualisieren
 function visualizeBudget() {
     const labels = categories; // Kategorien als Labels
     const data = {
