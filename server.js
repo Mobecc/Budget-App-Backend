@@ -48,7 +48,7 @@ app.get('/api/transactions', (req, res) => {
     });
 });
 
-// Route für den Root-Pfad
+// Route für den Root-Pfad.
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html')); // Stellt sicher, dass die Datei im public-Ordner ist
 });
