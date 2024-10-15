@@ -146,4 +146,3 @@ document.getElementById('settingsForm').addEventListener('submit', function (eve
             document.getElementById('settingsMessage').innerText = 'Ein Fehler ist aufgetreten.';
         });
 });
-//Ende
