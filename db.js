@@ -30,7 +30,7 @@ const addTransaction = (description, amount, category, transactionType, callback
     });
 };
 
-// Exporte
+// Export
 module.exports = {
     addTransaction
 };
