@@ -26,7 +26,7 @@ function calculateTotalBudget() {
     });
     return total;
 }
-// Budget visualisieren
+
 function visualizeBudget() {
     const labels = categories; // Kategorien als Labels
     const data = {
@@ -146,3 +146,4 @@ document.getElementById('settingsForm').addEventListener('submit', function (eve
             document.getElementById('settingsMessage').innerText = 'Ein Fehler ist aufgetreten.';
         });
 });
+//Ende
