@@ -53,5 +53,36 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html')); // Stellt sicher, dass die Datei im public-Ordner ist
 });
 
+// API zum Aktualisieren einer Transaktion
+app.put('/api/transactions/:id', (req, res) => {
+    const transactionId = req.params.id;
+    const { description, amount, category, transactionType } = req.body;
+
+    // Validierung der Eingabewerte
+    if (!description || isNaN(amount) || !category || !transactionType) {
+        return res.status(400).json({ success: false, message: 'Bitte füllen Sie alle Felder aus.' });
+    }
+
+    const query = 'UPDATE transactions SET description = ?, amount = ?, category = ?, type = ? WHERE id = ?';
+    connection.query(query, [description, amount, category, transactionType, transactionId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Fehler beim Aktualisieren der Transaktion.' });
+        }
+        res.json({ success: true });
+    });
+});
+// API zum Löschen einer Transaktion
+app.delete('/api/transactions/:id', (req, res) => {
+    const transactionId = req.params.id;
+
+    const query = 'DELETE FROM transactions WHERE id = ?';
+    connection.query(query, [transactionId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Fehler beim Löschen der Transaktion.' });
+        }
+        res.json({ success: true });
+    });
+});
+
 // Server starten
 app.listen(PORT, () => console.log(`Server läuft auf http://localhost:${PORT}`));
