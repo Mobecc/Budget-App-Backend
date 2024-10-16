@@ -18,7 +18,7 @@ connection.connect((err) => {
 
 // Funktion zum Hinzufügen einer Transaktion
 const addTransaction = (description, amount, category, transactionType, callback) => {
-    const query = 'INSERT INTO transactions (description, amount, category, transactionType) VALUES (?, ?, ?, ?)';
+    const query = 'INSERT INTO transactions (description, amount, category, type) VALUES (?, ?, ?, ?)';
     connection.query(query, [description, amount, category, transactionType], (err, results) => {
         if (err) {
             console.error('Fehler beim Hinzufügen der Transaktion:', err);
