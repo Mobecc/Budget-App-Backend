@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     password: 'Fkmb2003',
     database: 'budget_verwaltung'
 });
+
 // Verbindung zur Datenbank herstellen
 connection.connect((err) => {
     if (err) {
@@ -34,5 +35,3 @@ const addTransaction = (description, amount, category, transactionType, callback
 module.exports = {
     addTransaction
 };
-
-
