@@ -81,4 +81,14 @@ app.delete('/api/transactions/:id', (req, res) => {
     });
 });
 
-app.listen(PORT, () => console.log(`Server läuft auf http://localhost:${PORT}`));
+// Verbindung zur Datenbank herstellen und Server starten
+connection.connect((err) => {
+    if (err) {
+        console.error('Fehler beim Verbinden zur Datenbank:', err);
+        return;
+    }
+    app.listen(PORT, () => {
+        console.log(`Server läuft auf http://localhost:${PORT}`);
+        console.log('Erfolgreich mit der Datenbank verbunden.');
+    });
+});
