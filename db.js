@@ -35,3 +35,4 @@ const addTransaction = (description, amount, category, transactionType, callback
 module.exports = {
     addTransaction
 };
+//fertig

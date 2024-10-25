@@ -97,3 +97,4 @@ deleteTransaction(3);
 
 // Budget ganz unten anzeigen
 displayBudget();
+//fertig

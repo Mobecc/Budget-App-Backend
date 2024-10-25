@@ -92,3 +92,4 @@ connection.connect((err) => {
         console.log('Erfolgreich mit der Datenbank verbunden.');
     });
 });
+//fertig
