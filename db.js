@@ -3,7 +3,7 @@ const mysql = require('mysql');
 // Konfiguration für die Verbindung zur Datenbank
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
+    user: 'root ',
     password: 'Fkmb2003',
     database: 'budget_verwaltung'
 });
