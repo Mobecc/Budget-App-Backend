@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.htwberlin.budgetapp.controller.BudgetControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-11-07T17:04:58" hostname="MacBook-Air-von-Jacob.local" time="1.349">
+  <properties/>
+  <testcase name="testGetAllTransactions_EmptyList()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="1.349"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/jacob/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.19/154da3a65b4f4a909d3e5bdec55d1b2b4cbb6ce1/byte-buddy-agent-1.14.19.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
