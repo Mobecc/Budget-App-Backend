@@ -10,5 +10,5 @@ RUN gradle build --no-daemon
 
 ## Package Stage ##
 FROM eclipse-temurin:23-jdk
-COPY --from=build /home/gradle/src/build/libs/Budget-App-Backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /home/gradle/src/build/libs/budgetapp-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
