@@ -3,9 +3,9 @@ FROM gradle:jdk23 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 # for all env-variables that we will use in the future:
-ARG DB_PASSWORD
-ARG DB_URL
-ARG DB_USER
+ENV DB_URL=jdbc:postgresql://dpg-csvnh35umphs73ef68eg-a.frankfurt-postgres.render.com:5432/testname_ko1f
+ENV DB_USER=testname_ko1f_user
+ENV DB_PASSWORD=jp5fvZvfvZokyOXiqDZcRP9SSKP81iKZ
 RUN gradle build --no-daemon
 
 ## Package Stage ##
