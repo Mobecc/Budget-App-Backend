@@ -4,8 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "budget_item") // Explizit auf die Tabelle "budget_item" verweisen
 public class BudgetItem {
 
     @Id
@@ -15,16 +17,18 @@ public class BudgetItem {
     private double betrag;
     private String datum;
     private String kategorie;
+    private String typ; // Neue Spalte für den Transaktionstyp
 
     // Default-Konstruktor
     public BudgetItem() {}
 
     // Konstruktor mit Parametern
-    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie) {
+    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie, String typ) {
         this.beschreibung = beschreibung;
         this.betrag = betrag;
         this.datum = datum;
         this.kategorie = kategorie;
+        this.typ = typ; // Initialisierung des neuen Attributs
     }
 
     // Getter und Setter
@@ -68,7 +72,14 @@ public class BudgetItem {
         this.kategorie = kategorie;
     }
 
-    // Optional: toString-Methode zur leichteren Ausgabe
+    public String getTyp() {
+        return typ;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
+    }
+
     @Override
     public String toString() {
         return "BudgetItem{" +
@@ -77,6 +88,7 @@ public class BudgetItem {
                 ", betrag=" + betrag +
                 ", datum='" + datum + '\'' +
                 ", kategorie='" + kategorie + '\'' +
+                ", typ='" + typ + '\'' +
                 '}';
     }
 }
