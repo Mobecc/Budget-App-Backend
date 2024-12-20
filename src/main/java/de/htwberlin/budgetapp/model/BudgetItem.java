@@ -23,13 +23,22 @@ public class BudgetItem {
     // Default-Konstruktor
     public BudgetItem() {}
 
-    // Konstruktor
+    // Konstruktor mit allen Parametern
     public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, String datum) {
         this.beschreibung = beschreibung;
         this.betrag = betrag;
         this.kategorie = kategorie;
         this.typ = typ;
         this.datum = datum;
+    }
+
+    // Konstruktor mit abweichender Reihenfolge (für Tests)
+    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie) {
+        this.beschreibung = beschreibung;
+        this.betrag = betrag;
+        this.datum = datum;
+        this.kategorie = kategorie;
+        this.typ = null; // Standardwert für typ
     }
 
     // Getter und Setter
