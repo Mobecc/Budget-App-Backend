@@ -44,6 +44,10 @@ public class BudgetService {
         BudgetItem existingTransaction = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
 
+        // Debug-Log hinzufügen
+        System.out.println("Aktualisierung: Vorher: " + existingTransaction);
+        System.out.println("Aktualisierung: Neu: " + updatedTransaction);
+
         // Werte der bestehenden Transaktion aktualisieren
         existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
         existingTransaction.setBetrag(updatedTransaction.getBetrag());
@@ -52,8 +56,14 @@ public class BudgetService {
         existingTransaction.setDatum(updatedTransaction.getDatum());
 
         // Aktualisierte Transaktion speichern
-        return repository.save(existingTransaction);
+        BudgetItem savedTransaction = repository.save(existingTransaction);
+
+        // Debug-Log nach Speicherung
+        System.out.println("Aktualisierung: Gespeichert: " + savedTransaction);
+
+        return savedTransaction;
     }
+
 
     /**
      * Löscht eine Transaktion anhand der ID.

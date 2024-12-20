@@ -63,13 +63,14 @@ public class BudgetController {
             @RequestBody BudgetItem updatedTransaction) {
         try {
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
-            return ResponseEntity.ok(savedTransaction);
+            return ResponseEntity.ok(savedTransaction); // Rückgabe der aktualisierten Transaktion
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     /**
      * Löscht eine Transaktion nach ID.
