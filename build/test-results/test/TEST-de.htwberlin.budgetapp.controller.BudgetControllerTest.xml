@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.htwberlin.budgetapp.controller.BudgetControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-12-10T17:08:16" hostname="MEDO267" time="0.87">
+<testsuite name="de.htwberlin.budgetapp.controller.BudgetControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-12-20T13:37:03" hostname="MEDO267" time="0.792">
   <properties/>
-  <testcase name="testGetAllTransactions_SingleTransaction()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="0.853"/>
+  <testcase name="testGetAllTransactions_SingleTransaction()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="0.776"/>
   <testcase name="testGetAllTransactions_EmptyList()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="0.005"/>
-  <testcase name="testGetAllTransactions_MultipleTransactions()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="0.004"/>
-  <system-out><![CDATA[18:08:16.989 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- Alle Transaktionen abgerufen: 1
-18:08:17.003 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für eine Transaktion bestanden. Ergebnis: [BudgetItem{id=null, beschreibung='Test', betrag=100.0, datum='2024-12-10', kategorie='Einnahme'}]
-18:08:17.030 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- Alle Transaktionen abgerufen: 0
-18:08:17.030 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für leere Liste bestanden. Ergebnis: []
-18:08:17.035 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- Alle Transaktionen abgerufen: 2
-18:08:17.035 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für mehrere Transaktionen bestanden. Ergebnis: [BudgetItem{id=null, beschreibung='Lebensmittel', betrag=50.0, datum='2024-12-10', kategorie='Ausgabe'}, BudgetItem{id=null, beschreibung='Gehalt', betrag=2000.0, datum='2024-12-01', kategorie='Einnahme'}]
+  <testcase name="testGetAllTransactions_MultipleTransactions()" classname="de.htwberlin.budgetapp.controller.BudgetControllerTest" time="0.005"/>
+  <system-out><![CDATA[14:37:03.757 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - Abrufen aller Transaktionen gestartet.
+14:37:03.762 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - 1 Transaktionen erfolgreich abgerufen.
+14:37:03.776 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für eine Transaktion bestanden. Ergebnis: [BudgetItem{id=null, beschreibung='Test', betrag=100.0, datum='2024-12-10', kategorie='Einnahme', typ='null'}]
+14:37:03.800 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - Abrufen aller Transaktionen gestartet.
+14:37:03.801 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - 0 Transaktionen erfolgreich abgerufen.
+14:37:03.801 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für leere Liste bestanden. Ergebnis: []
+14:37:03.806 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - Abrufen aller Transaktionen gestartet.
+14:37:03.806 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetController -- GET /transactions - 2 Transaktionen erfolgreich abgerufen.
+14:37:03.807 [Test worker] INFO de.htwberlin.budgetapp.controller.BudgetControllerTest -- Test für mehrere Transaktionen bestanden. Ergebnis: [BudgetItem{id=null, beschreibung='Lebensmittel', betrag=50.0, datum='2024-12-10', kategorie='Ausgabe', typ='null'}, BudgetItem{id=null, beschreibung='Gehalt', betrag=2000.0, datum='2024-12-01', kategorie='Einnahme', typ='null'}]
 ]]></system-out>
   <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\Admin\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.19\154da3a65b4f4a909d3e5bdec55d1b2b4cbb6ce1\byte-buddy-agent-1.14.19.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
