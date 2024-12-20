@@ -64,7 +64,6 @@ public class BudgetService {
         return savedTransaction;
     }
 
-
     /**
      * Löscht eine Transaktion anhand der ID.
      *
