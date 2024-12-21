@@ -62,7 +62,7 @@ public class BudgetController {
             logger.warn("PUT /transactions/{} - Transaktion nicht gefunden: {}", id, e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            logger.error("PUT /transactions/{} - Fehler beim Aktualisieren der Transaktion: {}", id, e);
+            logger.error("PUT /transactions/{} - Fehler beim Aktualisieren der Transaktion.", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
