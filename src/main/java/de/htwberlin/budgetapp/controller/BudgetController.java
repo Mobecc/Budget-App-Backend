@@ -53,11 +53,12 @@ public class BudgetController {
     public ResponseEntity<BudgetItem> updateTransaction(
             @PathVariable Long id,
             @RequestBody BudgetItem updatedTransaction) {
+        logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
+
         try {
-            logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
             logger.info("PUT /transactions/{} - Transaktion erfolgreich aktualisiert: {}", id, savedTransaction);
-            return ResponseEntity.ok(savedTransaction); // Rückgabe der aktualisierten Transaktion
+            return ResponseEntity.ok(savedTransaction);
         } catch (IllegalArgumentException e) {
             logger.warn("PUT /transactions/{} - Transaktion nicht gefunden: {}", id, e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -66,6 +67,7 @@ public class BudgetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     @DeleteMapping("/transactions/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
