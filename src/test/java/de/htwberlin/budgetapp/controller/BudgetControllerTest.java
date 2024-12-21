@@ -53,25 +53,30 @@ public class BudgetControllerTest {
     // Test für das Zurückgeben einer Liste mit einem BudgetItem
     @Test
     public void testGetAllTransactions_SingleTransaction() throws Exception {
+        // Datum als Date-Objekt
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date testDate = sdf.parse("2024-12-10");
 
+        // BudgetItem mit Date-Objekt erstellen
         BudgetItem item = new BudgetItem("Test", 100.0, "Einnahme", "Kategorie", testDate);
         List<BudgetItem> transactions = List.of(item);
+
+        // Mocking des Services
         when(budgetService.getAllTransactions()).thenReturn(transactions);
 
+        // Controller-Methode aufrufen
         ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
         List<BudgetItem> result = response.getBody();
 
+        // Assertions
         assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
         assertEquals(1, result.size(), "Die Liste sollte eine Transaktion enthalten.");
         assertEquals("Test", result.get(0).getBeschreibung());
         assertEquals(100.0, result.get(0).getBetrag());
         assertEquals("Einnahme", result.get(0).getTyp());
         assertEquals(testDate, result.get(0).getDatum());
-
-        logger.info("Test für eine Transaktion bestanden. Ergebnis: {}", result);
     }
+
 
     // Test für das Zurückgeben einer Liste mit mehreren BudgetItems
     @Test
