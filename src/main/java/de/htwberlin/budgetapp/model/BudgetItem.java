@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @Table(name = "budget_item")
@@ -18,27 +21,20 @@ public class BudgetItem {
     private double betrag;       // entspricht "double precision"
     private String kategorie;    // entspricht "character varying(255)"
     private String typ;          // entspricht "character varying(255)"
-    private String datum;        // entspricht "character varying(255)"
+
+    @Temporal(TemporalType.DATE)
+    private Date datum;          // neues Datumsfeld
 
     // Default-Konstruktor
-    public BudgetItem() {}
+    public BudgetItem(String test, double v, String date, String einnahme) {}
 
     // Konstruktor mit allen Parametern
-    public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, String datum) {
+    public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, Date datum) {
         this.beschreibung = beschreibung;
         this.betrag = betrag;
         this.kategorie = kategorie;
         this.typ = typ;
         this.datum = datum;
-    }
-
-    // Konstruktor mit abweichender Reihenfolge (für Tests)
-    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie) {
-        this.beschreibung = beschreibung;
-        this.betrag = betrag;
-        this.datum = datum;
-        this.kategorie = kategorie;
-        this.typ = null; // Standardwert für typ
     }
 
     // Getter und Setter
@@ -82,11 +78,11 @@ public class BudgetItem {
         this.typ = typ;
     }
 
-    public String getDatum() {
+    public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(String datum) {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
 
@@ -98,7 +94,7 @@ public class BudgetItem {
                 ", betrag=" + betrag +
                 ", kategorie='" + kategorie + '\'' +
                 ", typ='" + typ + '\'' +
-                ", datum='" + datum + '\'' +
+                ", datum=" + datum +
                 '}';
     }
 }

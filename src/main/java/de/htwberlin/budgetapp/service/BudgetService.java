@@ -70,6 +70,7 @@ public class BudgetService {
 
         // Debug-Log nach Speicherung
         System.out.println("Aktualisierung: Gespeichert in der DB: " + savedTransaction);
+        System.out.println("Speichern in der Datenbank: " + savedTransaction);
 
         return savedTransaction;
     }
