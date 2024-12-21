@@ -26,7 +26,7 @@ public class BudgetItem {
     private Date datum;          // neues Datumsfeld
 
     // Default-Konstruktor
-    public BudgetItem(String test, double v, String date, String einnahme) {}
+    public BudgetItem() {}
 
     // Konstruktor mit allen Parametern
     public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, Date datum) {

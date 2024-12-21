@@ -18,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class BudgetControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(BudgetControllerTest.class);
@@ -36,72 +39,69 @@ public class BudgetControllerTest {
     // Test für das Zurückgeben einer leeren Liste
     @Test
     public void testGetAllTransactions_EmptyList() {
-        // Arrange: Mock den Service, um eine leere Liste zurückzugeben
         when(budgetService.getAllTransactions()).thenReturn(new ArrayList<>());
 
-        // Act: Rufe die Methode im Controller auf
         ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
-        List<BudgetItem> result = response.getBody(); // Extrahiere die Liste aus ResponseEntity
+        List<BudgetItem> result = response.getBody();
 
-        // Assert: Überprüfen, ob die zurückgegebene Liste leer ist
         assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
         assertEquals(0, result.size(), "Die Liste sollte leer sein.");
 
-        // Logging
         logger.info("Test für leere Liste bestanden. Ergebnis: {}", result);
     }
 
     // Test für das Zurückgeben einer Liste mit einem BudgetItem
     @Test
-    public void testGetAllTransactions_SingleTransaction() {
-        // Arrange: Erstelle eine Beispiel-Transaktion und mocke den Service
-        BudgetItem item = new BudgetItem("Test", 100.0, "2024-12-10", "Einnahme");
+    public void testGetAllTransactions_SingleTransaction() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date testDate = sdf.parse("2024-12-10");
+
+        BudgetItem item = new BudgetItem("Test", 100.0, "Einnahme", "Kategorie", testDate);
         List<BudgetItem> transactions = List.of(item);
         when(budgetService.getAllTransactions()).thenReturn(transactions);
 
-        // Act: Rufe die Methode im Controller auf
         ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
-        List<BudgetItem> result = response.getBody(); // Extrahiere die Liste aus ResponseEntity
+        List<BudgetItem> result = response.getBody();
 
-        // Assert: Überprüfen, ob die Liste eine Transaktion enthält und die Daten korrekt sind
         assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
         assertEquals(1, result.size(), "Die Liste sollte eine Transaktion enthalten.");
-        assertEquals("Test", result.get(0).getBeschreibung(), "Die Beschreibung sollte 'Test' sein.");
-        assertEquals(100.0, result.get(0).getBetrag(), "Der Betrag sollte 100.0 sein.");
-        assertEquals("Einnahme", result.get(0).getKategorie(), "Die Kategorie sollte 'Einnahme' sein.");
+        assertEquals("Test", result.get(0).getBeschreibung());
+        assertEquals(100.0, result.get(0).getBetrag());
+        assertEquals("Einnahme", result.get(0).getTyp());
+        assertEquals(testDate, result.get(0).getDatum());
 
-        // Logging
         logger.info("Test für eine Transaktion bestanden. Ergebnis: {}", result);
     }
 
     // Test für das Zurückgeben einer Liste mit mehreren BudgetItems
     @Test
-    public void testGetAllTransactions_MultipleTransactions() {
-        // Arrange: Erstelle mehrere Transaktionen und mocke den Service
-        BudgetItem item1 = new BudgetItem("Lebensmittel", 50.0, "2024-12-10", "Ausgabe");
-        BudgetItem item2 = new BudgetItem("Gehalt", 2000.0, "2024-12-01", "Einnahme");
+    public void testGetAllTransactions_MultipleTransactions() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = sdf.parse("2024-12-10");
+        Date date2 = sdf.parse("2024-12-01");
+
+        BudgetItem item1 = new BudgetItem("Lebensmittel", 50.0, "Ausgabe", "Kategorie1", date1);
+        BudgetItem item2 = new BudgetItem("Gehalt", 2000.0, "Einnahme", "Kategorie2", date2);
         List<BudgetItem> transactions = List.of(item1, item2);
+
         when(budgetService.getAllTransactions()).thenReturn(transactions);
 
-        // Act: Rufe die Methode im Controller auf
         ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
-        List<BudgetItem> result = response.getBody(); // Extrahiere die Liste aus ResponseEntity
+        List<BudgetItem> result = response.getBody();
 
-        // Assert: Überprüfen, ob die Liste beide Transaktionen enthält und die Daten korrekt sind
         assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
         assertEquals(2, result.size(), "Die Liste sollte zwei Transaktionen enthalten.");
 
-        // Erste Transaktion
-        assertEquals("Lebensmittel", result.get(0).getBeschreibung(), "Die erste Transaktion sollte 'Lebensmittel' sein.");
-        assertEquals(50.0, result.get(0).getBetrag(), "Der Betrag der ersten Transaktion sollte 50.0 sein.");
-        assertEquals("Ausgabe", result.get(0).getKategorie(), "Die Kategorie der ersten Transaktion sollte 'Ausgabe' sein.");
+        assertEquals("Lebensmittel", result.get(0).getBeschreibung());
+        assertEquals(50.0, result.get(0).getBetrag());
+        assertEquals("Ausgabe", result.get(0).getTyp());
+        assertEquals(date1, result.get(0).getDatum());
 
-        // Zweite Transaktion
-        assertEquals("Gehalt", result.get(1).getBeschreibung(), "Die zweite Transaktion sollte 'Gehalt' sein.");
-        assertEquals(2000.0, result.get(1).getBetrag(), "Der Betrag der zweiten Transaktion sollte 2000.0 sein.");
-        assertEquals("Einnahme", result.get(1).getKategorie(), "Die Kategorie der zweiten Transaktion sollte 'Einnahme' sein.");
+        assertEquals("Gehalt", result.get(1).getBeschreibung());
+        assertEquals(2000.0, result.get(1).getBetrag());
+        assertEquals("Einnahme", result.get(1).getTyp());
+        assertEquals(date2, result.get(1).getDatum());
 
-        // Logging
         logger.info("Test für mehrere Transaktionen bestanden. Ergebnis: {}", result);
     }
 }
