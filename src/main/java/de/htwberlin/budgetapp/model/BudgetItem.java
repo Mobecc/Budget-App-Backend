@@ -5,35 +5,36 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
-@Table(name = "budget_item") // Explizit auf die Tabelle "budget_item" verweisen
+@Table(name = "budget_item")
 public class BudgetItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String beschreibung;
-    private double betrag;
-    private String datum;
-    private String kategorie;
-    private String typ; // Neue Spalte für den Transaktionstyp
+
+    private String beschreibung; // entspricht "character varying(255)"
+    private double betrag;       // entspricht "double precision"
+    private String kategorie;    // entspricht "character varying(255)"
+    private String typ;          // entspricht "character varying(255)"
+
+    @Temporal(TemporalType.DATE)
+    private Date datum;          // neues Datumsfeld
 
     // Default-Konstruktor
     public BudgetItem() {}
 
-    // Konstruktor mit fünf Parametern
-    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie, String typ) {
+    // Konstruktor mit allen Parametern
+    public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, Date datum) {
         this.beschreibung = beschreibung;
         this.betrag = betrag;
-        this.datum = datum;
         this.kategorie = kategorie;
-        this.typ = typ; // Initialisierung des neuen Attributs
-    }
-
-    // Konstruktor mit vier Parametern (für Tests)
-    public BudgetItem(String beschreibung, double betrag, String datum, String kategorie) {
-        this(beschreibung, betrag, datum, kategorie, null); // Der Typ wird auf null gesetzt
+        this.typ = typ;
+        this.datum = datum;
     }
 
     // Getter und Setter
@@ -61,14 +62,6 @@ public class BudgetItem {
         this.betrag = betrag;
     }
 
-    public String getDatum() {
-        return datum;
-    }
-
-    public void setDatum(String datum) {
-        this.datum = datum;
-    }
-
     public String getKategorie() {
         return kategorie;
     }
@@ -85,15 +78,23 @@ public class BudgetItem {
         this.typ = typ;
     }
 
+    public Date getDatum() {
+        return datum;
+    }
+
+    public void setDatum(Date datum) {
+        this.datum = datum;
+    }
+
     @Override
     public String toString() {
         return "BudgetItem{" +
                 "id=" + id +
                 ", beschreibung='" + beschreibung + '\'' +
                 ", betrag=" + betrag +
-                ", datum='" + datum + '\'' +
                 ", kategorie='" + kategorie + '\'' +
                 ", typ='" + typ + '\'' +
+                ", datum=" + datum +
                 '}';
     }
 }

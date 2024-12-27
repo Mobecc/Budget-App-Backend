@@ -33,6 +33,50 @@ public class BudgetService {
     }
 
     /**
+     * Aktualisiert eine bestehende Transaktion.
+     *
+     * @param id Die ID der zu aktualisierenden Transaktion.
+     * @param updatedTransaction Die neuen Werte für die Transaktion.
+     * @return Das aktualisierte BudgetItem-Objekt.
+     */
+    public BudgetItem updateTransaction(Long id, BudgetItem updatedTransaction) {
+        // Existierende Transaktion aus der Datenbank abrufen
+        BudgetItem existingTransaction = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
+
+        // Debug-Log vor dem Update
+        System.out.println("Aktualisierung: Vorher: " + existingTransaction);
+        System.out.println("Aktualisierung: Eingehend: " + updatedTransaction);
+
+        // Werte der bestehenden Transaktion aktualisieren
+        if (updatedTransaction.getBeschreibung() != null) {
+            existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
+        }
+        if (updatedTransaction.getBetrag() > 0) {
+            existingTransaction.setBetrag(updatedTransaction.getBetrag());
+        }
+        if (updatedTransaction.getKategorie() != null) {
+            existingTransaction.setKategorie(updatedTransaction.getKategorie());
+        }
+        if (updatedTransaction.getTyp() != null) {
+            existingTransaction.setTyp(updatedTransaction.getTyp());
+        }
+        if (updatedTransaction.getDatum() != null) {
+            existingTransaction.setDatum(updatedTransaction.getDatum());
+        }
+
+        // Aktualisierte Transaktion speichern
+        BudgetItem savedTransaction = repository.save(existingTransaction);
+
+        // Debug-Log nach Speicherung
+        System.out.println("Aktualisierung: Gespeichert in der DB: " + savedTransaction);
+        System.out.println("Speichern in der Datenbank: " + savedTransaction);
+
+        return savedTransaction;
+    }
+
+
+    /**
      * Löscht eine Transaktion anhand der ID.
      *
      * @param id Die ID der zu löschenden Transaktion.

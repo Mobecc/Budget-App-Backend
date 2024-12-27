@@ -15,7 +15,10 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 // Erlaube alle Endpunkte
                 registry.addMapping("/**")
-                        .allowedOrigins("https://budget-app-frontend-tpct.onrender.com") // Erlaube Frontend-URLs (Render und Local)
+                        .allowedOrigins(
+                                "https://budget-app-frontend-tpct.onrender.com",
+                                "http://localhost:3000" // Lokale Entwicklung
+                        ) // Erlaube Frontend-URLs (Render und Local)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Erlaubte HTTP-Methoden
                         .allowedHeaders("*") // Alle Header erlauben
                         .allowCredentials(true) // Cookies/Authtoken erlauben
