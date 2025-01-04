@@ -45,20 +45,20 @@ public class BudgetService {
                 .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
 
         // Debug-Log vor dem Update
-        System.out.println("Aktualisierung: Vorher: " + existingTransaction);
-        System.out.println("Aktualisierung: Eingehend: " + updatedTransaction);
+        System.out.println("Aktualisierung gestartet: Vorher: " + existingTransaction);
+        System.out.println("Aktualisierung: Neue Werte: " + updatedTransaction);
 
-        // Werte der bestehenden Transaktion aktualisieren
-        if (updatedTransaction.getBeschreibung() != null) {
+        // Aktualisiere nur die Werte, die nicht null oder gültig sind
+        if (updatedTransaction.getBeschreibung() != null && !updatedTransaction.getBeschreibung().isEmpty()) {
             existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
         }
         if (updatedTransaction.getBetrag() > 0) {
             existingTransaction.setBetrag(updatedTransaction.getBetrag());
         }
-        if (updatedTransaction.getKategorie() != null) {
+        if (updatedTransaction.getKategorie() != null && !updatedTransaction.getKategorie().isEmpty()) {
             existingTransaction.setKategorie(updatedTransaction.getKategorie());
         }
-        if (updatedTransaction.getTyp() != null) {
+        if (updatedTransaction.getTyp() != null && !updatedTransaction.getTyp().isEmpty()) {
             existingTransaction.setTyp(updatedTransaction.getTyp());
         }
         if (updatedTransaction.getDatum() != null) {
@@ -69,8 +69,7 @@ public class BudgetService {
         BudgetItem savedTransaction = repository.save(existingTransaction);
 
         // Debug-Log nach Speicherung
-        System.out.println("Aktualisierung: Gespeichert in der DB: " + savedTransaction);
-        System.out.println("Speichern in der Datenbank: " + savedTransaction);
+        System.out.println("Aktualisierung abgeschlossen: Gespeichert in der DB: " + savedTransaction);
 
         return savedTransaction;
     }
