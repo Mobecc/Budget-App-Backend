@@ -54,7 +54,6 @@ public class BudgetController {
             @PathVariable Long id,
             @RequestBody BudgetItem updatedTransaction) {
         logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
-
         try {
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
             logger.info("PUT /transactions/{} - Transaktion erfolgreich aktualisiert: {}", id, savedTransaction);
