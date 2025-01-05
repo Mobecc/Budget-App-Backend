@@ -53,17 +53,17 @@ public class BudgetController {
     public ResponseEntity<BudgetItem> updateTransaction(
             @PathVariable Long id,
             @RequestBody BudgetItem updatedTransaction) {
-        logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
+        logger.info("PUT /transactions/{} - Aktualisierung gestartet: {}", id, updatedTransaction);
         try {
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
-            logger.info("PUT /transactions/{} - Transaktion erfolgreich aktualisiert: {}", id, savedTransaction);
+            logger.info("PUT /transactions/{} - Erfolgreich aktualisiert: {}", id, savedTransaction);
             return ResponseEntity.ok(savedTransaction);
         } catch (IllegalArgumentException e) {
-            logger.warn("PUT /transactions/{} - Transaktion nicht gefunden: {}", id, e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            logger.warn("PUT /transactions/{} - Transaktion nicht gefunden oder ungültig: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            logger.error("PUT /transactions/{} - Fehler beim Aktualisieren der Transaktion.", id, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            logger.error("PUT /transactions/{} - Fehler bei der Aktualisierung: {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

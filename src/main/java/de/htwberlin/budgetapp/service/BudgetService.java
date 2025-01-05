@@ -10,9 +10,6 @@ import java.util.List;
 @Service
 public class BudgetService {
 
-    @Autowired
-    private BudgetItemRepository repository;
-
     /**
      * Gibt alle Transaktionen sortiert nach Datum (absteigend) zurück.
      *
@@ -39,16 +36,14 @@ public class BudgetService {
      * @param updatedTransaction Die neuen Werte für die Transaktion.
      * @return Das aktualisierte BudgetItem-Objekt.
      */
+    @Autowired
+    private BudgetItemRepository repository;
+
     public BudgetItem updateTransaction(Long id, BudgetItem updatedTransaction) {
-        // Existierende Transaktion aus der Datenbank abrufen
         BudgetItem existingTransaction = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Transaktion mit ID " + id + " nicht gefunden."));
 
-        // Debug-Log vor dem Update
-        System.out.println("Aktualisierung gestartet: Vorher: " + existingTransaction);
-        System.out.println("Aktualisierung: Neue Werte: " + updatedTransaction);
-
-        // Aktualisiere nur die Werte, die nicht null oder gültig sind
+        // Aktualisiere nur Felder, die nicht null oder gültig sind
         if (updatedTransaction.getBeschreibung() != null && !updatedTransaction.getBeschreibung().isEmpty()) {
             existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
         }
@@ -65,12 +60,9 @@ public class BudgetService {
             existingTransaction.setDatum(updatedTransaction.getDatum());
         }
 
-        // Aktualisierte Transaktion speichern
         BudgetItem savedTransaction = repository.save(existingTransaction);
 
-        // Debug-Log nach Speicherung
-        System.out.println("Aktualisierung abgeschlossen: Gespeichert in der DB: " + savedTransaction);
-
+        System.out.println("Transaktion erfolgreich aktualisiert: " + savedTransaction);
         return savedTransaction;
     }
 

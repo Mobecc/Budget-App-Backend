@@ -1,12 +1,6 @@
 package de.htwberlin.budgetapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -17,18 +11,16 @@ public class BudgetItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String beschreibung; // entspricht "character varying(255)"
-    private double betrag;       // entspricht "double precision"
-    private String kategorie;    // entspricht "character varying(255)"
-    private String typ;          // entspricht "character varying(255)"
+    private String beschreibung;
+    private double betrag;
+    private String kategorie;
+    private String typ;
 
     @Temporal(TemporalType.DATE)
-    private Date datum;          // neues Datumsfeld
+    private Date datum;
 
-    // Default-Konstruktor
     public BudgetItem() {}
 
-    // Konstruktor mit allen Parametern
     public BudgetItem(String beschreibung, double betrag, String kategorie, String typ, Date datum) {
         this.beschreibung = beschreibung;
         this.betrag = betrag;
