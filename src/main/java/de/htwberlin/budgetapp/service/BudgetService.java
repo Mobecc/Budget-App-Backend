@@ -1,54 +1,49 @@
 package de.htwberlin.budgetapp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import de.htwberlin.budgetapp.model.BudgetItem;
 import de.htwberlin.budgetapp.repository.BudgetItemRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BudgetService {
 
+    private static final Logger logger = LoggerFactory.getLogger(BudgetService.class);
+
     @Autowired
     private BudgetItemRepository repository;
 
-    /**
-     * Gibt alle Transaktionen sortiert nach Datum (absteigend) zurück.
-     *
-     * @return Eine Liste der BudgetItem-Objekte, sortiert nach Datum.
-     */
     public List<BudgetItem> getAllTransactions() {
         return repository.findAllByOrderByDatumDesc();
     }
 
-    /**
-     * Fügt eine neue Transaktion hinzu.
-     *
-     * @param transaction Die hinzuzufügende Transaktion.
-     * @return Das gespeicherte BudgetItem-Objekt.
-     */
     public BudgetItem addTransaction(BudgetItem transaction) {
+        if (transaction.getBeschreibung() == null || transaction.getBeschreibung().isEmpty()) {
+            throw new IllegalArgumentException("Beschreibung darf nicht leer sein.");
+        }
+        if (transaction.getBetrag() <= 0) {
+            throw new IllegalArgumentException("Betrag muss größer als 0 sein.");
+        }
+        if (transaction.getKategorie() == null || transaction.getKategorie().isEmpty()) {
+            throw new IllegalArgumentException("Kategorie darf nicht leer sein.");
+        }
+        if (transaction.getTyp() == null || transaction.getTyp().isEmpty()) {
+            throw new IllegalArgumentException("Typ darf nicht leer sein.");
+        }
         return repository.save(transaction);
     }
 
-    /**
-     * Aktualisiert eine bestehende Transaktion.
-     *
-     * @param id Die ID der zu aktualisierenden Transaktion.
-     * @param updatedTransaction Die neuen Werte für die Transaktion.
-     * @return Das aktualisierte BudgetItem-Objekt.
-     */
     public BudgetItem updateTransaction(Long id, BudgetItem updatedTransaction) {
-        // Existierende Transaktion aus der Datenbank abrufen
         BudgetItem existingTransaction = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
 
-        // Debug-Log vor dem Update
-        System.out.println("Aktualisierung gestartet: Vorher: " + existingTransaction);
-        System.out.println("Aktualisierung: Neue Werte: " + updatedTransaction);
+        logger.debug("Update initiated: Before: {}", existingTransaction);
+        logger.debug("Update with: {}", updatedTransaction);
 
-        // Aktualisiere nur die Werte, die nicht null oder gültig sind
         if (updatedTransaction.getBeschreibung() != null && !updatedTransaction.getBeschreibung().isEmpty()) {
             existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
         }
@@ -65,22 +60,13 @@ public class BudgetService {
             existingTransaction.setDatum(updatedTransaction.getDatum());
         }
 
-        // Aktualisierte Transaktion speichern
         BudgetItem savedTransaction = repository.save(existingTransaction);
 
-        // Debug-Log nach Speicherung
-        System.out.println("Aktualisierung abgeschlossen: Gespeichert in der DB: " + savedTransaction);
+        logger.info("Update completed: Saved to DB: {}", savedTransaction);
 
         return savedTransaction;
     }
 
-
-    /**
-     * Löscht eine Transaktion anhand der ID.
-     *
-     * @param id Die ID der zu löschenden Transaktion.
-     * @throws IllegalArgumentException, wenn die Transaktion nicht existiert.
-     */
     public void deleteTransaction(Long id) {
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("Transaction with ID " + id + " not found.");
@@ -88,23 +74,12 @@ public class BudgetService {
         repository.deleteById(id);
     }
 
-    /**
-     * Berechnet das Gesamtbudget, indem alle Transaktionen summiert werden.
-     *
-     * @return Die Gesamtsumme der Beträge aller Transaktionen.
-     */
     public double calculateTotalBudget() {
         return repository.findAll().stream()
-                .mapToDouble(BudgetItem::getBetrag)
+                .mapToDouble(item -> "Einnahme".equalsIgnoreCase(item.getTyp()) ? item.getBetrag() : -item.getBetrag())
                 .sum();
     }
 
-    /**
-     * Überprüft, ob eine Transaktion mit der angegebenen ID existiert.
-     *
-     * @param id Die ID der Transaktion.
-     * @return true, wenn die Transaktion existiert, andernfalls false.
-     */
     public boolean existsById(Long id) {
         return repository.existsById(id);
     }
