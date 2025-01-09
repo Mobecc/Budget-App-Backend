@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface BudgetItemRepository extends JpaRepository<BudgetItem, Long> {
 
+
     List<BudgetItem> findAllByOrderByDatumDesc();
 }
