@@ -54,18 +54,30 @@ public class BudgetController {
             @PathVariable Long id,
             @RequestBody BudgetItem updatedTransaction) {
         logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
+
         try {
+            // Prüfe, ob die Transaktion existiert
+            if (!service.existsById(id)) {
+                logger.warn("PUT /transactions/{} - Transaktion mit ID nicht gefunden.", id);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Aktualisiere die Transaktion über den Service
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
             logger.info("PUT /transactions/{} - Transaktion erfolgreich aktualisiert: {}", id, savedTransaction);
+
+            // Erfolgreiche Rückgabe der aktualisierten Transaktion
             return ResponseEntity.ok(savedTransaction);
+
         } catch (IllegalArgumentException e) {
-            logger.warn("PUT /transactions/{} - Transaktion nicht gefunden: {}", id, e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            logger.warn("PUT /transactions/{} - Ungültige Daten für die Transaktion: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
             logger.error("PUT /transactions/{} - Fehler beim Aktualisieren der Transaktion.", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     @DeleteMapping("/transactions/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
