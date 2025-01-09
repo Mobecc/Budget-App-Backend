@@ -1,7 +1,5 @@
 package de.htwberlin.budgetapp.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import de.htwberlin.budgetapp.model.BudgetItem;
@@ -12,8 +10,6 @@ import java.util.List;
 @Service
 public class BudgetService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BudgetService.class);
-
     @Autowired
     private BudgetItemRepository repository;
 
@@ -23,10 +19,7 @@ public class BudgetService {
      * @return Eine Liste der BudgetItem-Objekte, sortiert nach Datum.
      */
     public List<BudgetItem> getAllTransactions() {
-        logger.info("Abrufen aller Transaktionen sortiert nach Datum gestartet.");
-        List<BudgetItem> transactions = repository.findAllByOrderByDatumDesc();
-        logger.info("Abrufen abgeschlossen: {} Transaktionen gefunden.", transactions.size());
-        return transactions;
+        return repository.findAllByOrderByDatumDesc();
     }
 
     /**
@@ -36,10 +29,7 @@ public class BudgetService {
      * @return Das gespeicherte BudgetItem-Objekt.
      */
     public BudgetItem addTransaction(BudgetItem transaction) {
-        logger.info("Hinzufügen einer neuen Transaktion: {}", transaction);
-        BudgetItem savedTransaction = repository.save(transaction);
-        logger.info("Transaktion erfolgreich gespeichert: {}", savedTransaction);
-        return savedTransaction;
+        return repository.save(transaction);
     }
 
     /**
@@ -50,14 +40,15 @@ public class BudgetService {
      * @return Das aktualisierte BudgetItem-Objekt.
      */
     public BudgetItem updateTransaction(Long id, BudgetItem updatedTransaction) {
-        logger.info("Aktualisierung der Transaktion mit ID {} gestartet.", id);
-
+        // Existierende Transaktion aus der Datenbank abrufen
         BudgetItem existingTransaction = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction with ID " + id + " not found."));
 
-        logger.debug("Vorherige Transaktion: {}", existingTransaction);
+        // Debug-Log vor dem Update
+        System.out.println("Aktualisierung gestartet: Vorher: " + existingTransaction);
+        System.out.println("Aktualisierung: Neue Werte: " + updatedTransaction);
 
-        // Aktualisiere nur gültige Werte
+        // Aktualisiere nur die Werte, die nicht null oder gültig sind
         if (updatedTransaction.getBeschreibung() != null && !updatedTransaction.getBeschreibung().isEmpty()) {
             existingTransaction.setBeschreibung(updatedTransaction.getBeschreibung());
         }
@@ -74,24 +65,27 @@ public class BudgetService {
             existingTransaction.setDatum(updatedTransaction.getDatum());
         }
 
+        // Aktualisierte Transaktion speichern
         BudgetItem savedTransaction = repository.save(existingTransaction);
 
-        logger.info("Transaktion erfolgreich aktualisiert: {}", savedTransaction);
+        // Debug-Log nach Speicherung
+        System.out.println("Aktualisierung abgeschlossen: Gespeichert in der DB: " + savedTransaction);
+
         return savedTransaction;
     }
+
 
     /**
      * Löscht eine Transaktion anhand der ID.
      *
      * @param id Die ID der zu löschenden Transaktion.
+     * @throws IllegalArgumentException, wenn die Transaktion nicht existiert.
      */
     public void deleteTransaction(Long id) {
-        logger.info("Löschen der Transaktion mit ID {} gestartet.", id);
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("Transaction with ID " + id + " not found.");
         }
         repository.deleteById(id);
-        logger.info("Transaktion mit ID {} erfolgreich gelöscht.", id);
     }
 
     /**
@@ -100,12 +94,9 @@ public class BudgetService {
      * @return Die Gesamtsumme der Beträge aller Transaktionen.
      */
     public double calculateTotalBudget() {
-        logger.info("Berechnung des Gesamtbudgets gestartet.");
-        double total = repository.findAll().stream()
-                .mapToDouble(item -> item.getTyp().equalsIgnoreCase("Einnahme") ? item.getBetrag() : -item.getBetrag())
+        return repository.findAll().stream()
+                .mapToDouble(BudgetItem::getBetrag)
                 .sum();
-        logger.info("Gesamtbudget berechnet: {}", total);
-        return total;
     }
 
     /**

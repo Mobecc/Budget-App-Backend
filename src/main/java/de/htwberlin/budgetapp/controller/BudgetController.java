@@ -20,7 +20,6 @@ public class BudgetController {
     @Autowired
     private BudgetService service;
 
-    // GET: Retrieve all transactions
     @GetMapping("/transactions")
     public ResponseEntity<List<BudgetItem>> getAllTransactions() {
         logger.info("GET /transactions - Abrufen aller Transaktionen gestartet.");
@@ -34,7 +33,6 @@ public class BudgetController {
         }
     }
 
-    // POST: Add a new transaction
     @PostMapping("/transactions")
     public ResponseEntity<BudgetItem> addTransaction(@RequestBody BudgetItem transaction) {
         logger.info("POST /transactions - Neue Transaktion wird verarbeitet: {}", transaction);
@@ -51,13 +49,10 @@ public class BudgetController {
         }
     }
 
-    // PUT: Update an existing transaction
     @PutMapping("/transactions/{id}")
     public ResponseEntity<BudgetItem> updateTransaction(
-            @PathVariable Long id,
-            @RequestBody BudgetItem updatedTransaction) {
+            @PathVariable Long id, @RequestBody BudgetItem updatedTransaction) {
         logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
-
         try {
             if (!service.existsById(id)) {
                 logger.warn("PUT /transactions/{} - Transaktion mit ID nicht gefunden.", id);
@@ -76,7 +71,6 @@ public class BudgetController {
         }
     }
 
-    // DELETE: Delete a transaction
     @DeleteMapping("/transactions/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         logger.info("DELETE /transactions/{} - Löschen der Transaktion gestartet.", id);
@@ -90,20 +84,6 @@ public class BudgetController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             logger.error("DELETE /transactions/{} - Fehler beim Löschen der Transaktion.", id, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    // GET: Calculate total budget
-    @GetMapping("/totalBudget")
-    public ResponseEntity<Double> getTotalBudget() {
-        logger.info("GET /totalBudget - Berechnung des Gesamtbudgets gestartet.");
-        try {
-            double totalBudget = service.calculateTotalBudget();
-            logger.info("GET /totalBudget - Gesamtbudget erfolgreich berechnet: {}", totalBudget);
-            return ResponseEntity.ok(totalBudget);
-        } catch (Exception e) {
-            logger.error("GET /totalBudget - Fehler beim Berechnen des Gesamtbudgets.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
