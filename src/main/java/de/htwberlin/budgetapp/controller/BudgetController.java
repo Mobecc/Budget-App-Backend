@@ -20,6 +20,7 @@ public class BudgetController {
     @Autowired
     private BudgetService service;
 
+    // GET: Retrieve all transactions
     @GetMapping("/transactions")
     public ResponseEntity<List<BudgetItem>> getAllTransactions() {
         logger.info("GET /transactions - Abrufen aller Transaktionen gestartet.");
@@ -33,6 +34,7 @@ public class BudgetController {
         }
     }
 
+    // POST: Add a new transaction
     @PostMapping("/transactions")
     public ResponseEntity<BudgetItem> addTransaction(@RequestBody BudgetItem transaction) {
         logger.info("POST /transactions - Neue Transaktion wird verarbeitet: {}", transaction);
@@ -49,6 +51,7 @@ public class BudgetController {
         }
     }
 
+    // PUT: Update an existing transaction
     @PutMapping("/transactions/{id}")
     public ResponseEntity<BudgetItem> updateTransaction(
             @PathVariable Long id,
@@ -56,19 +59,14 @@ public class BudgetController {
         logger.info("PUT /transactions/{} - Aktualisieren der Transaktion gestartet: {}", id, updatedTransaction);
 
         try {
-            // Prüfe, ob die Transaktion existiert
             if (!service.existsById(id)) {
                 logger.warn("PUT /transactions/{} - Transaktion mit ID nicht gefunden.", id);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            // Aktualisiere die Transaktion über den Service
             BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
             logger.info("PUT /transactions/{} - Transaktion erfolgreich aktualisiert: {}", id, savedTransaction);
-
-            // Erfolgreiche Rückgabe der aktualisierten Transaktion
             return ResponseEntity.ok(savedTransaction);
-
         } catch (IllegalArgumentException e) {
             logger.warn("PUT /transactions/{} - Ungültige Daten für die Transaktion: {}", id, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -78,7 +76,7 @@ public class BudgetController {
         }
     }
 
-
+    // DELETE: Delete a transaction
     @DeleteMapping("/transactions/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         logger.info("DELETE /transactions/{} - Löschen der Transaktion gestartet.", id);
@@ -96,6 +94,7 @@ public class BudgetController {
         }
     }
 
+    // GET: Calculate total budget
     @GetMapping("/totalBudget")
     public ResponseEntity<Double> getTotalBudget() {
         logger.info("GET /totalBudget - Berechnung des Gesamtbudgets gestartet.");
