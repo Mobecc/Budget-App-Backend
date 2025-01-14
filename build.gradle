@@ -42,6 +42,12 @@ dependencies {
 	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Für JUnit 5
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+
+	// Mocking-Bibliothek für Tests (optional)
+	testImplementation 'org.mockito:mockito-core:5.6.0'
 }
 
 tasks.named('test') {
