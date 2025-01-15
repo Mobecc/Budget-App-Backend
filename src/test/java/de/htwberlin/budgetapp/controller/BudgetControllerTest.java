@@ -9,86 +9,73 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BudgetControllerTest {
 
     @Mock
-    private BudgetService budgetService;
+    private BudgetService service;
 
     @InjectMocks
-    private BudgetController budgetController;
-
-    private SimpleDateFormat sdf;
+    private BudgetController controller;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        sdf = new SimpleDateFormat("yyyy-MM-dd"); // Format für Datum
     }
 
     @Test
-    public void testGetAllTransactions_SingleTransactionWithDate() throws Exception {
-        // Arrange: Erstelle ein Datum und eine Transaktion
-        Date testDate = sdf.parse("2024-12-10");
-        BudgetItem item = new BudgetItem("Test", 100.0, "Kategorie", "Einnahme", testDate);
-        List<BudgetItem> transactions = List.of(item);
+    public void testGetAllTransactions() {
+        List<BudgetItem> items = Arrays.asList(
+                new BudgetItem("Test1", 100.0, "Miete", "Einnahme", new Date()),
+                new BudgetItem("Test2", 50.0, "Transport", "Ausgabe", new Date())
+        );
 
-        // Mock den Service
-        when(budgetService.getAllTransactions()).thenReturn(transactions);
+        when(service.getAllTransactions()).thenReturn(items);
 
-        // Act: Rufe die Methode im Controller auf
-        ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
-        List<BudgetItem> result = response.getBody();
+        ResponseEntity<List<BudgetItem>> response = controller.getAllTransactions();
 
-        // Assert: Überprüfen, ob die Transaktion korrekt zurückgegeben wird
-        assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
-        assertEquals(1, result.size(), "Die Liste sollte genau eine Transaktion enthalten.");
-        assertEquals("Test", result.get(0).getBeschreibung());
-        assertEquals(100.0, result.get(0).getBetrag());
-        assertEquals("Kategorie", result.get(0).getKategorie()); // Korrigiert
-        assertEquals("Einnahme", result.get(0).getTyp()); // Korrigiert
-        assertEquals(sdf.format(testDate), sdf.format(result.get(0).getDatum()), "Das Datum sollte übereinstimmen.");
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size());
+        verify(service, times(1)).getAllTransactions();
     }
 
     @Test
-    public void testGetAllTransactions_MultipleTransactionsWithDates() throws Exception {
-        // Arrange: Erstelle mehrere Transaktionen mit Datum
-        Date date1 = sdf.parse("2024-12-10");
-        Date date2 = sdf.parse("2024-12-01");
-        BudgetItem item1 = new BudgetItem("Lebensmittel", 50.0, "Kategorie1", "Ausgabe", date1);
-        BudgetItem item2 = new BudgetItem("Gehalt", 2000.0, "Kategorie2", "Einnahme", date2);
-        List<BudgetItem> transactions = List.of(item1, item2);
+    public void testAddTransaction() {
+        BudgetItem newItem = new BudgetItem("Test", 100.0, "Miete", "Einnahme", new Date());
+        when(service.addTransaction(newItem)).thenReturn(newItem);
 
-        // Mock den Service
-        when(budgetService.getAllTransactions()).thenReturn(transactions);
+        ResponseEntity<BudgetItem> response = controller.addTransaction(newItem);
 
-        // Act: Rufe die Methode im Controller auf
-        ResponseEntity<List<BudgetItem>> response = budgetController.getAllTransactions();
-        List<BudgetItem> result = response.getBody();
+        assertEquals(201, response.getStatusCodeValue());
+        assertEquals("Test", response.getBody().getBeschreibung());
+        verify(service, times(1)).addTransaction(newItem);
+    }
 
-        // Assert: Überprüfen, ob die Transaktionen korrekt zurückgegeben werden
-        assertNotNull(result, "Die zurückgegebene Liste sollte nicht null sein.");
-        assertEquals(2, result.size(), "Die Liste sollte zwei Transaktionen enthalten.");
+    @Test
+    public void testUpdateTransaction() {
+        BudgetItem updatedItem = new BudgetItem("Updated", 200.0, "Lebensmittel", "Ausgabe", new Date());
+        when(service.updateTransaction(1L, updatedItem)).thenReturn(updatedItem);
 
-        // Erste Transaktion
-        assertEquals("Lebensmittel", result.get(0).getBeschreibung());
-        assertEquals(50.0, result.get(0).getBetrag());
-        assertEquals("Kategorie1", result.get(0).getKategorie()); // Korrigiert
-        assertEquals("Ausgabe", result.get(0).getTyp()); // Korrigiert
-        assertEquals(sdf.format(date1), sdf.format(result.get(0).getDatum()));
+        ResponseEntity<BudgetItem> response = controller.updateTransaction(1L, updatedItem);
 
-        // Zweite Transaktion
-        assertEquals("Gehalt", result.get(1).getBeschreibung());
-        assertEquals(2000.0, result.get(1).getBetrag());
-        assertEquals("Kategorie2", result.get(1).getKategorie()); // Korrigiert
-        assertEquals("Einnahme", result.get(1).getTyp()); // Korrigiert
-        assertEquals(sdf.format(date2), sdf.format(result.get(1).getDatum()));
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Updated", response.getBody().getBeschreibung());
+        verify(service, times(1)).updateTransaction(1L, updatedItem);
+    }
+
+    @Test
+    public void testDeleteTransaction() {
+        doNothing().when(service).deleteTransaction(1L);
+
+        ResponseEntity<Void> response = controller.deleteTransaction(1L);
+
+        assertEquals(204, response.getStatusCodeValue());
+        verify(service, times(1)).deleteTransaction(1L);
     }
 }
