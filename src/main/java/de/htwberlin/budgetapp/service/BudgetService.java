@@ -6,6 +6,7 @@ import de.htwberlin.budgetapp.model.BudgetItem;
 import de.htwberlin.budgetapp.repository.BudgetItemRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BudgetService {
@@ -35,7 +36,7 @@ public class BudgetService {
     /**
      * Aktualisiert eine bestehende Transaktion.
      *
-     * @param id Die ID der zu aktualisierenden Transaktion.
+     * @param id                 Die ID der zu aktualisierenden Transaktion.
      * @param updatedTransaction Die neuen Werte für die Transaktion.
      * @return Das aktualisierte BudgetItem-Objekt.
      */
