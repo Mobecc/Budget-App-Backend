@@ -72,6 +72,7 @@ public class BudgetController {
     }
 
 
+
     @DeleteMapping("/transactions/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         logger.info("DELETE /transactions/{} - Löschen der Transaktion gestartet.", id);
