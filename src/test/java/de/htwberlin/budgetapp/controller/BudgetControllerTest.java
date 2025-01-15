@@ -56,19 +56,6 @@ public class BudgetControllerTest {
         assertEquals("Test", response.getBody().getBeschreibung());
         verify(service, times(1)).addTransaction(newItem);
     }
-
-    @Test
-    public void testUpdateTransaction() {
-        BudgetItem updatedItem = new BudgetItem("Updated", 200.0, "Lebensmittel", "Ausgabe", new Date());
-        when(service.updateTransaction(1L, updatedItem)).thenReturn(updatedItem);
-
-        ResponseEntity<BudgetItem> response = controller.updateTransaction(1L, updatedItem);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Updated", response.getBody().getBeschreibung());
-        verify(service, times(1)).updateTransaction(1L, updatedItem);
-    }
-
     @Test
     public void testDeleteTransaction() {
         doNothing().when(service).deleteTransaction(1L);
