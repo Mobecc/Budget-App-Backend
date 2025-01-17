@@ -50,27 +50,32 @@ public class BudgetController {
         }
     }
 
-    @PatchMapping("/transactions/{id}")
+    @PutMapping("/transactions/{id}")
     public ResponseEntity<BudgetItem> updateTransaction(
-            @PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        logger.info("PATCH /transactions/{} - Partielle Aktualisierung gestartet: {}", id, updates);
+            @PathVariable Long id, @RequestBody BudgetItem updatedTransaction) {
+        logger.info("PUT /transactions/{} - Vollständige Aktualisierung gestartet: {}", id, updatedTransaction);
+
         try {
+            // Existenzprüfung über den Service
             if (!service.existsById(id)) {
-                logger.warn("PATCH /transactions/{} - Transaktion nicht gefunden.", id);
+                logger.warn("PUT /transactions/{} - Transaktion nicht gefunden.", id);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            BudgetItem updatedTransaction = service.updateTransaction(id, (BudgetItem) updates);
-            logger.info("PATCH /transactions/{} - Erfolgreich aktualisiert: {}", id, updatedTransaction);
-            return ResponseEntity.ok(updatedTransaction);
+
+            // Aktualisierung der Transaktion über den Service
+            BudgetItem savedTransaction = service.updateTransaction(id, updatedTransaction);
+            logger.info("PUT /transactions/{} - Erfolgreich aktualisiert: {}", id, savedTransaction);
+
+            return ResponseEntity.ok(savedTransaction);
+
         } catch (IllegalArgumentException e) {
-            logger.warn("PATCH /transactions/{} - Ungültige Daten: {}", id, e.getMessage());
+            logger.warn("PUT /transactions/{} - Ungültige Daten: {}", id, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
-            logger.error("PATCH /transactions/{} - Fehler beim Aktualisieren.", id, e);
+            logger.error("PUT /transactions/{} - Fehler beim Aktualisieren.", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 
 
     @DeleteMapping("/transactions/{id}")
